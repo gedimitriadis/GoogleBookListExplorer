@@ -6,4 +6,6 @@
     <string name="author">Author:</string>
     <string name="language">Language:</string>
     <string name="description">Description:</string>
+    <string name="book_image">book image</string>
+    <string name="boy_reading_a_book">boy reading a book</string>
 </resources>

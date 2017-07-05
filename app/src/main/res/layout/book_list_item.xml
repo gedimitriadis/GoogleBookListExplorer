@@ -4,16 +4,20 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
+    <!-- book image-->
     <ImageView
         android:id="@+id/Image_View"
-        style="@style/imageStyle" />
+        style="@style/imageStyle"
+        android:contentDescription="@string/book_image"/>
 
+    <!-- book data-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin8"
         android:orientation="vertical">
 
+        <!-- book title-->
         <LinearLayout
             style="@style/LinearLayoutStyle">
 
@@ -26,6 +30,7 @@
                 style="@style/DataStyle"/>
         </LinearLayout>
 
+        <!-- book author-->
         <LinearLayout
             style="@style/LinearLayoutStyle">
 
@@ -39,11 +44,12 @@
                 />
         </LinearLayout>
 
+        <!-- book language-->
         <LinearLayout
             style="@style/LinearLayoutStyle">
 
             <TextView
-                android:text="Language:"
+                android:text="@string/language"
                 style="@style/labelStyle"/>
 
             <TextView
@@ -52,6 +58,7 @@
                 />
         </LinearLayout>
 
+        <!-- book description-->
         <LinearLayout
             style="@style/LinearLayoutStyle">
 
