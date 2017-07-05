@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Google Book List Explorer</string>
+    <string name="type_search_key">Type Search Key</string>
+    <string name="search">Search</string>
+    <string name="title">Title:</string>
+    <string name="author">Author:</string>
+    <string name="language">Language:</string>
+    <string name="description">Description:</string>
+</resources>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/Image_View"
+        style="@style/imageStyle" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin8"
+        android:orientation="vertical">
+
+        <LinearLayout
+            style="@style/LinearLayoutStyle">
+
+            <TextView
+                android:text="@string/title"
+                style="@style/labelStyle" />
+
+            <TextView
+                android:id="@+id/Title_TextView"
+                style="@style/DataStyle"/>
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/LinearLayoutStyle">
+
+            <TextView
+                android:text="@string/author"
+                style="@style/labelStyle"/>
+
+            <TextView
+                android:id="@+id/Author_TextView"
+                style="@style/DataStyle"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/LinearLayoutStyle">
+
+            <TextView
+                android:text="Language:"
+                style="@style/labelStyle"/>
+
+            <TextView
+                android:id="@+id/Language_TextView"
+                style="@style/DataStyle"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/LinearLayoutStyle">
+
+            <TextView
+                android:text="@string/description"
+                style="@style/labelStyle"/>
+
+            <TextView
+                android:id="@+id/Description_TextView"
+                style="@style/DataStyle"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,31 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height300"
+            android:layout_margin="@dimen/margin16"
+            android:src="@drawable/boy_reading" />
+
+        <EditText
+            android:id="@+id/Search_key"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin16"
+            android:hint="@string/type_search_key" />
+
+        <Button
+            android:id="@+id/Search_button"
+            style="@style/ButtonStyle"
+            android:text="@string/search" />
+    </LinearLayout>
+
+</ScrollView>
