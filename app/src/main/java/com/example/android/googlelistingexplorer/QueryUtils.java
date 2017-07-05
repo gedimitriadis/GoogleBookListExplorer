@@ -19,6 +19,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import static android.R.attr.description;
+import static android.provider.Contacts.SettingsColumns.KEY;
 
 /**
  * Created by georgeD on 29/06/2017.
@@ -28,6 +29,16 @@ public class QueryUtils {
 
     /** Tag for the log messages */
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
+
+    /** Keys for JSON parsing */
+    private static final String KEY_VOLUMEINFO = "volumeInfo";
+    private static final String KEY_TITLE = "title";
+    private static final String KEY_AUTHORS = "authors";
+    private static final String KEY_DESCRIPTION = "description";
+    private static final String KEY_IMAGELINKS = "imageLinks";
+    private static final String KEY_SMALLTHUMBNAIL = "smallThumbnail";
+    private static final String KEY_LANGUAGE = "language";
+    private static final String KEY_PREVIEWLINK = "previewLink";
 
     /**
      * Create a private constructor because no one should ever create a {@link QueryUtils} object.
@@ -160,95 +171,98 @@ public class QueryUtils {
             // Create a JSONObject from the JSON response string
             JSONObject baseJsonResponse = new JSONObject(BookJSON);
 
-            // Extract the JSONArray associated with the key called "features",
-            // which represents a list of features (or earthquakes).
-            JSONArray BookArray = baseJsonResponse.getJSONArray("items");
+            // Extract the JSONArray associated with the key called "items",
+            // which represents a list of features for books.
+            if (baseJsonResponse.has("items")) {
 
-            String bookImage;
-            String bookTitle;
-            String bookAuthor="";
-            String bookDescription;
-            String bookLanguage;
-            String bookPreviewLink;
+                JSONArray BookArray = baseJsonResponse.optJSONArray("items");
 
-            // For each book in the BookArray, create an {@link book} object
-            for (int i = 0; i < BookArray.length(); i++) {
+                String bookImage;
+                String bookTitle;
+                String bookAuthor = "";
+                String bookDescription;
+                String bookLanguage;
+                String bookPreviewLink;
 
-                // Get a single book at position i within the list of books
-                JSONObject currentBook = BookArray.getJSONObject(i);
+                // For each book in the BookArray, create an {@link book} object
+                for (int i = 0; i < BookArray.length(); i++) {
 
-                // For a given book, extract the JSONObject associated with the
-                // key called "volumeInfo", which represents a list of all properties
-                // for that book.
-                JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");
+                    // Get a single book at position i within the list of books
+                    JSONObject currentBook = BookArray.getJSONObject(i);
 
-                // if there are images get image link else image link is null
-                if (volumeInfo.has("imageLinks")) {
-                    JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
-                    bookImage = imageLinks.getString("smallThumbnail");
+                    // For a given book, extract the JSONObject associated with the
+                    // key called "volumeInfo", which represents a list of all properties
+                    // for that book.
+                    JSONObject volumeInfo = currentBook.getJSONObject(KEY_VOLUMEINFO);
 
-                } else {
-                    bookImage = null;
-                }
+                    // if there are images get image link else image link is null
+                    if (volumeInfo.has(KEY_IMAGELINKS)) {
+                        JSONObject imageLinks = volumeInfo.getJSONObject(KEY_IMAGELINKS);
+                        bookImage = imageLinks.getString(KEY_SMALLTHUMBNAIL);
 
-                // if there is a title get book title else book title is null
-                if (volumeInfo.has("title")) {
-                    bookTitle = volumeInfo.getString("title");
-                } else {
-                    bookTitle = null;
-                }
-
-                // if there are authors get book authors from JSONArray authors or else authors is null
-                JSONArray authors = volumeInfo.getJSONArray("authors");
-                if (authors!=null) {
-                    // if there is just one author
-                    if (authors.length()== 1) {
-                        bookAuthor = authors.getString(0);
-                    //if there are multiple authors
-                    }else {
-                        for (int j = 0; j < authors.length(); j++) {
-                            bookAuthor += "\n"+ authors.getString(j);
-                        }
+                    } else {
+                        bookImage = null;
                     }
-                } else {
-                    bookAuthor = null;
+
+                    // if there is a title get book title else book title is null
+                    if (volumeInfo.has(KEY_TITLE)) {
+                        bookTitle = volumeInfo.getString(KEY_TITLE);
+                    } else {
+                        bookTitle = null;
+                    }
+
+                    // if there are authors get book authors from JSONArray authors or else authors is null
+                    JSONArray authors = volumeInfo.optJSONArray(KEY_AUTHORS);
+                    if (authors != null) {
+                        // if there is just one author
+                        if (authors.length() == 1) {
+                            bookAuthor = authors.getString(0);
+                            //if there are multiple authors
+                        } else {
+                            for (int j = 0; j < authors.length(); j++) {
+                                bookAuthor += "\n" + authors.getString(j);
+                            }
+                        }
+                    } else {
+                        bookAuthor = null;
+                    }
+
+                    // if there is a a book description else book description is null
+                    if (volumeInfo.has(KEY_DESCRIPTION)) {
+                        bookDescription = volumeInfo.getString(KEY_DESCRIPTION);
+                    } else {
+                        bookDescription = "no description available";
+                    }
+
+                    // if there is a a book language else book language is null
+                    if (volumeInfo.has(KEY_LANGUAGE)) {
+                        bookLanguage = volumeInfo.getString(KEY_LANGUAGE);
+                    } else {
+                        bookLanguage = null;
+                    }
+
+                    // if there is a a book previewlink else previewlink is null
+                    if (volumeInfo.has(KEY_PREVIEWLINK)) {
+                        bookPreviewLink = volumeInfo.getString(KEY_PREVIEWLINK);
+                    } else {
+                        bookPreviewLink = null;
+                    }
+
+
+                    // Create a new {@link bookitem} object from the JSON response.
+                    BookItem bookitem = new BookItem(bookImage, bookTitle, bookAuthor, bookLanguage, bookDescription, bookPreviewLink);
+
+                    Log.v("QueryUtils", bookImage + bookAuthor + bookDescription + bookLanguage + bookTitle + bookPreviewLink);
+                    // Add the new {@link book} to the list of books.
+                    BookItems.add(bookitem);
                 }
-
-                // if there is a a book description else book description is null
-                if (volumeInfo.has("description")) {
-                    bookDescription = volumeInfo.getString("description");
-                } else {
-                    bookDescription = "no description available";
-                }
-
-                // if there is a a book language else book language is null
-                if (volumeInfo.has("language")) {
-                    bookLanguage = volumeInfo.getString("language");
-                } else {
-                    bookLanguage = null;
-                }
-
-                // if there is a a book previewlink else previewlink is null
-                if (volumeInfo.has("previewLink")) {
-                    bookPreviewLink = volumeInfo.getString("previewLink");
-                } else {
-                    bookPreviewLink = null;
-                }
-
-
-                // Create a new {@link bookitem} object from the JSON response.
-                BookItem bookitem = new BookItem(bookImage,bookTitle, bookAuthor, bookLanguage, bookDescription,bookPreviewLink);
-
-                Log.v("QueryUtils", bookImage + bookAuthor + bookDescription + bookLanguage + bookTitle + bookPreviewLink);
-                // Add the new {@link book} to the list of books.
-                BookItems.add(bookitem);
             }
-
         } catch (JSONException e) {
             // If an error is thrown when executing any of the above statements in the "try" block,
             // catch the exception here, so the app doesn't crash. Print a log message
             // with the message from the exception.
-            Log.e("QueryUtils", "Problem parsing the BookItem JSON results", e);
+
+            Log.e(LOG_TAG, "Problem parsing the BookItem JSON results", e);
         }
 
         // Return the list of BookItems

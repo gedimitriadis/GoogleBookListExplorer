@@ -12,6 +12,7 @@ import android.widget.TextView;
 public class SearchActivity extends AppCompatActivity {
     // initialize variable to hold string to be attached to google api URL
     String finalString = "";
+    public static final String BASE_URl = "https://www.googleapis.com/books/v1/volumes?q=";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class SearchActivity extends AppCompatActivity {
         //remove spaces from user's input
         stringToAdd = stringToAdd.replace(" ","%20").trim();
         //attach user's search key to Google Book API Url
-        finalString = "https://www.googleapis.com/books/v1/volumes?q=" + stringToAdd;
+        finalString = BASE_URl + stringToAdd;
         Log.v("SearchActivity",  finalString);
         return finalString;
     }
